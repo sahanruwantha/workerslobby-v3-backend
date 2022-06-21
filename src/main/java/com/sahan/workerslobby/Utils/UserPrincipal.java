@@ -11,6 +11,10 @@ import static java.util.Arrays.stream;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.stream;
+
+/* This is the user entity for security */
+
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
 
