@@ -2,6 +2,8 @@ package com.sahan.workerslobby;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class WorkerslobbyApplication {
@@ -10,4 +12,10 @@ public class WorkerslobbyApplication {
 		SpringApplication.run(WorkerslobbyApplication.class, args);
 	}
 
+
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder()
+	{
+		return new BCryptPasswordEncoder();
+	}
 }

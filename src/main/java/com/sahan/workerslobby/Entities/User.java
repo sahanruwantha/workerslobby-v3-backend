@@ -40,17 +40,17 @@ public class User implements Serializable
     private boolean isNotLocked;
 
 
-    @OneToMany(mappedBy = "taskID")
-    private List<Task> relatedTasks;
-
-    @OneToMany(mappedBy = "ticketID")
-    private List<Ticket> relatedTickets;
-
-    @ManyToOne
-    @JoinTable(
-            name = "company_user",
-            joinColumns = @JoinColumn( name = "userID"),
-            inverseJoinColumns = @JoinColumn( name = "companyID")
-    )
-    private Company company;
+//    @OneToMany(mappedBy = "taskID")
+//    private List<Task> relatedTasks;
+//
+//    @OneToMany(mappedBy = "ticketID")
+//    private List<Ticket> relatedTickets;
+//
+//    @ManyToOne
+//    @JoinTable(
+//            name = "company_user",
+//            joinColumns = @JoinColumn( name = "userID"),
+//            inverseJoinColumns = @JoinColumn( name = "companyID")
+//    )
+//    private Company company;
 }

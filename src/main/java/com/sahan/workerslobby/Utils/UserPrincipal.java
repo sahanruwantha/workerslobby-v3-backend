@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 
-/* This is the user entity for security */
+/* This is the user entity/class for security */
 
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
