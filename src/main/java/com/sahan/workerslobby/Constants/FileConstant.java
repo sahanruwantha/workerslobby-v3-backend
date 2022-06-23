@@ -4,7 +4,7 @@ public class FileConstant
 {
     public static final String USER_IMAGE_PATH = "/user/image";
     public static final String JPG_EXTENSION = "jpg";
-    public static final String USER_FOLDER = System.getProperty("user.home") + "/workerslobby-version-2/user-profile-images";
+    public static final String USER_FOLDER = System.getProperty("user.home") + "/workerslobby-version-3/user-profile-images";
     public static final String DIRECTORY_CREATED = "Created directory for: ";
     public static final String DEFAULT_USER_IMAGE_PATH = "/user/image/profile/";
 
