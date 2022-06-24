@@ -28,4 +28,5 @@ public class Task implements Serializable
             inverseJoinColumns = @JoinColumn( name = "userID")
     )
     private User assignedUser;
+
 }

@@ -8,7 +8,6 @@ import com.sahan.workerslobby.Exceptions.UserNameExistsException;
 import com.sahan.workerslobby.Exceptions.UserNotFoundException;
 import com.sahan.workerslobby.Repositories.UserRepository;
 import com.sahan.workerslobby.Services.LoginAttemptsService;
-import com.sahan.workerslobby.Services.UserService;
 import com.sahan.workerslobby.Utils.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -42,7 +41,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @Service
 @Transactional
 @Qualifier("UserDetailsService")
-public class UserServiceImpl implements UserService, UserDetailsService
+public class UserService implements com.sahan.workerslobby.Services.UserService, UserDetailsService
 {
 
     private UserRepository userRepository;
@@ -51,9 +50,9 @@ public class UserServiceImpl implements UserService, UserDetailsService
     private LoginAttemptsService loginAttemptsService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository,
-                           BCryptPasswordEncoder bCryptPasswordEncoder,
-                           LoginAttemptsService loginAttemptsService)
+    public UserService(UserRepository userRepository,
+                       BCryptPasswordEncoder bCryptPasswordEncoder,
+                       LoginAttemptsService loginAttemptsService)
     {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -189,6 +188,18 @@ public class UserServiceImpl implements UserService, UserDetailsService
     public User updateProfileImage(String username, MultipartFile newProfileImage) throws UserNotFoundException, UserNameExistsException, EmailExistsException, IOException {
         User user = validateNewUsernameAndEmail(username, null, null);
         saveProfileImage(user, newProfileImage);
+        return user;
+    }
+
+    @Override
+    public User findUserByUserID(long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+
+    public User validateUserById(long id) throws UserNotFoundException {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null)
+            throw new UserNotFoundException("Invalid user id");
         return user;
     }
 

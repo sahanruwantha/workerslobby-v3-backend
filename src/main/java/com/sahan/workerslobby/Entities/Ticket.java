@@ -22,6 +22,8 @@ public class Ticket implements Serializable
 
     private String ticketName;
 
+    private String ticketDescription;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_ticket",
