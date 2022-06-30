@@ -18,12 +18,13 @@ public class TaskAndTicket implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false, unique = true)
-    private Long taskAndTicketID;
+    private long taskAndTicketID;
 
-    @OneToOne
-    private Task task;
+    private long ticketId;
 
-    @OneToOne
-    private Ticket ticket;
+    private long taskId;
 
+    private String Description;
+
+    private boolean state;
 }

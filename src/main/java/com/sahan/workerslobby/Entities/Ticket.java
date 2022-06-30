@@ -18,17 +18,14 @@ public class Ticket implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false, unique = true)
-    private Long ticketID;
+    private long ticketID;
 
     private String ticketName;
 
     private String ticketDescription;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_ticket",
-            joinColumns = @JoinColumn( name = "ticketID"),
-            inverseJoinColumns = @JoinColumn( name = "userID")
-    )
-    private User userName;
+    private long clientId;
+
+    private boolean state;
+
 }

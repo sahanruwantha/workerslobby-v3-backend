@@ -1,14 +1,11 @@
 package com.sahan.workerslobby.Services;
 
-import com.sahan.workerslobby.Entities.Task;
-import com.sahan.workerslobby.Entities.TaskAndTicket;
+import com.sahan.workerslobby.Exceptions.TaskAndTicketNotFoundException;
+import com.sahan.workerslobby.Exceptions.TaskNotFoundException;
 
 public interface TaskAndTicketService
 {
-    TaskAndTicket findTaskAndTicketByTaskID(long Id);
-    TaskAndTicket findTaskAndTicketByTicketID(long Id);
+    void createTaskAndTicketForClient(long ticketId, String Description);
 
-    void deleteTaskAndTicketByTask(Task task);
-
-    Task findTaskAndTicketByTask(Task task);
+    void createTaskAndTicketForEngineer(long taskId, long ticketId) throws TaskAndTicketNotFoundException, TaskNotFoundException;
 }

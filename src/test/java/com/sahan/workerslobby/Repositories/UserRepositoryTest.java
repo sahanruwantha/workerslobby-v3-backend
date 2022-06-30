@@ -11,16 +11,4 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserRepositoryTest {
 
-    UserRepository userRepository;
-
-    @Autowired
-    public UserRepositoryTest(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Test
-    void getUser()
-    {
-        log.info(userRepository.findUserByUserName("kukeskywalker").toString());
-    }
 }

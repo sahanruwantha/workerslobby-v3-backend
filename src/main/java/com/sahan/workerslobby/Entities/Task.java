@@ -19,14 +19,13 @@ public class Task implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false, unique = true)
-    private Long taskID;
+    private long taskID;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_task",
-            joinColumns = @JoinColumn( name = "taskID"),
-            inverseJoinColumns = @JoinColumn( name = "userID")
-    )
-    private User assignedUser;
+    private long engineerId;
 
+    private String description;
+
+    private boolean state;
+
+    private long ticketId;
 }

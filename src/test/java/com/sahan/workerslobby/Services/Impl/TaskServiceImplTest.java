@@ -1,6 +1,9 @@
 package com.sahan.workerslobby.Services.Impl;
 
+import com.sahan.workerslobby.Exceptions.TaskAndTicketNotFoundException;
+import com.sahan.workerslobby.Exceptions.TaskNotFoundException;
 import com.sahan.workerslobby.Exceptions.UserNameExistsException;
+import com.sahan.workerslobby.Exceptions.UserNotFoundException;
 import com.sahan.workerslobby.Services.TaskService;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
@@ -21,7 +24,7 @@ class TaskServiceImplTest
     }
 
     @Test
-    void createTask() throws UserNameExistsException {
-        taskService.createTask(1);
+    void createTask() throws UserNotFoundException, TaskAndTicketNotFoundException, TaskNotFoundException {
+        taskService.createTask(1, "assign lord vadar", 2);
     }
 }

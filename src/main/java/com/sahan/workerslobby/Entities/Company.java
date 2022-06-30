@@ -19,7 +19,7 @@ public class Company implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false, unique = true)
     @Getter
-    private Long companyID;
+    private long companyID;
     @Getter
     private String name;
 

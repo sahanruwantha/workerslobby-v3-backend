@@ -1,106 +1,72 @@
 package com.sahan.workerslobby.Services.Impl;
 
+
 import com.sahan.workerslobby.Entities.Task;
-import com.sahan.workerslobby.Entities.TaskAndTicket;
+import com.sahan.workerslobby.Entities.Ticket;
 import com.sahan.workerslobby.Entities.User;
+import com.sahan.workerslobby.Exceptions.TaskAndTicketNotFoundException;
 import com.sahan.workerslobby.Exceptions.TaskNotFoundException;
+import com.sahan.workerslobby.Exceptions.TicketNotFoundException;
 import com.sahan.workerslobby.Exceptions.UserNotFoundException;
-import com.sahan.workerslobby.Repositories.TaskAndTicketRepository;
 import com.sahan.workerslobby.Repositories.TaskRepository;
+import com.sahan.workerslobby.Repositories.TicketRepository;
 import com.sahan.workerslobby.Services.TaskAndTicketService;
 import com.sahan.workerslobby.Services.TaskService;
+import com.sahan.workerslobby.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.List;
 
 @Service
 public class TaskServiceImpl implements TaskService
 {
     private UserService userService;
-
     private TaskRepository taskRepository;
 
-    private TaskAndTicketRepository taskAndTicketRepository;
-
-    private TaskAndTicketService taskAndTicketService;
+    private TicketRepository ticketRepository;
 
     @Autowired
-    public TaskServiceImpl(UserService userService,
-                           TaskRepository taskRepository,
-                           TaskAndTicketRepository taskAndTicketRepository,
-                           TaskAndTicketService taskAndTicketService)
-    {
+    public TaskServiceImpl(UserService userService, TaskRepository taskRepository, TicketRepository ticketRepository) {
         this.userService = userService;
         this.taskRepository = taskRepository;
-        this.taskAndTicketRepository = taskAndTicketRepository;
-        this.taskAndTicketService = taskAndTicketService;
+        this.ticketRepository = ticketRepository;
     }
 
-    @Override
-    public Task createTask(long engineerID)
-    {
-        User engineer = userService.findUserByUserID(engineerID);
-        if (engineer == null)
-        {
-            throw new UsernameNotFoundException("NO ENGINEER FOUND BY GIVEN USERNAME");
-        }
-        Task newTask = new Task();
-        TaskAndTicket taskAndTicket = new TaskAndTicket();
-        newTask.setAssignedUser(engineer);
-        taskAndTicket.setTask(newTask);
-        taskRepository.save(newTask);
-        taskAndTicketRepository.save(taskAndTicket);
 
+
+    @Override
+    public Task createTask(long engineerId,
+                           String description,
+                           long ticketId) throws UserNotFoundException, TicketNotFoundException {
+        User user = userService.validateUserById(engineerId);
+        validateTicket(ticketId);
+        Task task = new Task();
+        task.setEngineerId(engineerId);
+        task.setDescription(description);
+        task.setState(true);
+        //task.setTicketId(ticketId);
+        Task newTask = taskRepository.save(task);
         return newTask;
     }
 
     @Override
-    public void deleteTask(long id) throws TaskNotFoundException
+    public List<Task> getPendingTasks(long engineerId) throws UserNotFoundException
     {
-        Task task = taskRepository.findById(id).orElse(null);
-        taskAndTicketService.deleteTaskAndTicketByTask(task);
-        deleteTaskByTaskID(id);
+        userService.validateUserById(engineerId);
+        return taskRepository.findTasksByEngineerIdAndState(engineerId, true);
     }
-
-
 
     @Override
-    public Task updateTask(long engineerId, long taskId, long newEngineerId) throws TaskNotFoundException, UserNotFoundException, IOException {
-        User engineer = userService.findUserByUserID(engineerId);
-        Task updateTask = taskRepository.findById(taskId).orElse(null);
-        User newEngineer = userService.findUserByUserID(newEngineerId);
-        TaskAndTicket taskAndTicket =  taskAndTicketRepository.findTaskAndTicketByTask(updateTask);
-        if (engineer == null)
-        {
-            throw new UserNotFoundException("invalid user id");
-        }
-        if (updateTask == null)
-        {
-            throw new TaskNotFoundException("invalid task");
-        }
-
-        if (newEngineer == null)
-        {
-            throw new UserNotFoundException("invalid user id for new engineer");
-        }
-        if (taskAndTicket == null)
-        {
-            throw new IOException("Error Occurred cannot process");
-        }
-        updateTask.setAssignedUser(newEngineer);
-        taskAndTicket.setTask(updateTask);
-        taskRepository.save(updateTask);
-        taskAndTicketRepository.save(taskAndTicket);
-        return updateTask;
+    public List<Task> getDoneTasks(long engineerId) throws UserNotFoundException
+    {
+        userService.validateUserById(engineerId);
+        return taskRepository.findTasksByEngineerIdAndState(engineerId, false);
     }
 
-    private void deleteTaskByTaskID(long id) throws TaskNotFoundException
-    {
-        Task task = taskRepository.findById(id).orElse(null);
-        if (task == null)
-            throw new TaskNotFoundException("invalid task Id");
+    private void validateTicket(long ticketId) throws TicketNotFoundException {
+        Ticket ticket = ticketRepository.findById(ticketId).orElse(null);
+        if (ticket == null)
+            throw new TicketNotFoundException("ivalid Ticket Id");
     }
 }

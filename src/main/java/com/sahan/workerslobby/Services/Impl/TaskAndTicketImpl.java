@@ -1,7 +1,8 @@
 package com.sahan.workerslobby.Services.Impl;
 
-import com.sahan.workerslobby.Entities.Task;
 import com.sahan.workerslobby.Entities.TaskAndTicket;
+import com.sahan.workerslobby.Exceptions.TaskNotFoundException;
+import com.sahan.workerslobby.Repositories.TaskAndTicketRepository;
 import com.sahan.workerslobby.Services.TaskAndTicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,36 +10,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskAndTicketImpl implements TaskAndTicketService
 {
-    private com.sahan.workerslobby.Repositories.TaskAndTicketRepository taskAndTicketRepository;
+    private TaskAndTicketRepository taskAndTicketRepository;
 
     @Autowired
-    public TaskAndTicketImpl(com.sahan.workerslobby.Repositories.TaskAndTicketRepository taskAndTicketRepository) {
+    public TaskAndTicketImpl(TaskAndTicketRepository taskAndTicketRepository) {
         this.taskAndTicketRepository = taskAndTicketRepository;
     }
 
     @Override
-    public TaskAndTicket findTaskAndTicketByTaskID(long Id)
+    public void createTaskAndTicketForClient(long ticketId, String description)
     {
-//        return taskAndTicketRepository.findTaskAndTicketByTaskID(Id);
-        return null;
+        TaskAndTicket taskAndTicket = new TaskAndTicket();
+        taskAndTicket.setTicketId(ticketId);
+        taskAndTicket.setDescription(description);
+        taskAndTicketRepository.save(taskAndTicket);
     }
 
     @Override
-    public TaskAndTicket findTaskAndTicketByTicketID(long Id) {
-        return null;
+    public void createTaskAndTicketForEngineer(long taskId, long ticketId) throws TaskNotFoundException {
+        TaskAndTicket taskAndTicket = taskAndTicketRepository.findTaskAndTicketByTicketId(ticketId);
+        if (taskAndTicket == null)
+            throw new TaskNotFoundException("Invalid ticket Id");
+        taskAndTicket.setTaskId(taskId);
+        taskAndTicketRepository.save(taskAndTicket);
     }
-
-
-    @Override
-    public void deleteTaskAndTicketByTask(Task task)
-    {
-        taskAndTicketRepository.deleteTaskAndTicketByTask(task);
-    }
-
-    @Override
-    public Task findTaskAndTicketByTask(Task task)
-    {
-        return findTaskAndTicketByTask(task);
-    }
-
 }

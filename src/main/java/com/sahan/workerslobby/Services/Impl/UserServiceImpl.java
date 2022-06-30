@@ -8,6 +8,7 @@ import com.sahan.workerslobby.Exceptions.UserNameExistsException;
 import com.sahan.workerslobby.Exceptions.UserNotFoundException;
 import com.sahan.workerslobby.Repositories.UserRepository;
 import com.sahan.workerslobby.Services.LoginAttemptsService;
+import com.sahan.workerslobby.Services.UserService;
 import com.sahan.workerslobby.Utils.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -41,7 +42,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @Service
 @Transactional
 @Qualifier("UserDetailsService")
-public class UserService implements com.sahan.workerslobby.Services.UserService, UserDetailsService
+public class UserServiceImpl implements UserService, UserDetailsService
 {
 
     private UserRepository userRepository;
@@ -50,9 +51,9 @@ public class UserService implements com.sahan.workerslobby.Services.UserService,
     private LoginAttemptsService loginAttemptsService;
 
     @Autowired
-    public UserService(UserRepository userRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder,
-                       LoginAttemptsService loginAttemptsService)
+    public UserServiceImpl(UserRepository userRepository,
+                           BCryptPasswordEncoder bCryptPasswordEncoder,
+                           LoginAttemptsService loginAttemptsService)
     {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -191,16 +192,26 @@ public class UserService implements com.sahan.workerslobby.Services.UserService,
         return user;
     }
 
+
     @Override
-    public User findUserByUserID(long userId) {
-        return userRepository.findById(userId).orElse(null);
+    public User validateUser(long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null)
+            throw new UserNotFoundException("invalid User Id");
+        return user;
     }
 
+    @Override
     public User validateUserById(long id) throws UserNotFoundException {
         User user = userRepository.findById(id).orElse(null);
         if (user == null)
             throw new UserNotFoundException("Invalid user id");
         return user;
+    }
+
+    @Override
+    public List<User> getAllEngineers() {
+        return userRepository.findUsersByRole("ROLE_ENGINEER");
     }
 
     private String getTemporaryProfileImageUrl(String username)
@@ -301,5 +312,6 @@ public class UserService implements com.sahan.workerslobby.Services.UserService,
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(USER_IMAGE_PATH + userName + FORWARD_SLASH + userName + DOT + JPG_EXTENSION).toUriString();
     }
+
 
 }

@@ -68,6 +68,7 @@ public class UserController extends ExceptionHandling
     @PostMapping("/log-in")
     public ResponseEntity<User> login(@RequestBody User user)
     {
+        log.info(String.valueOf(user));
         authenticate(user.getUserName(), user.getPassword());
         User loginUser = userService.findByUserName(user.getUserName());
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
@@ -121,6 +122,13 @@ public class UserController extends ExceptionHandling
     public ResponseEntity<List<User>> getUsers()
     {
         List<User> users = userService.getUsers();
+        return new ResponseEntity<>(users, OK);
+    }
+
+    @GetMapping("/getEngineers")
+    public ResponseEntity<List<User>> getEngineers()
+    {
+        List<User> users = userService.getAllEngineers();
         return new ResponseEntity<>(users, OK);
     }
 

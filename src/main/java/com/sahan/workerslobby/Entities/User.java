@@ -54,13 +54,6 @@ public class User implements Serializable
     @Getter
     private boolean isNotLocked;
 
-
-    @OneToMany(mappedBy = "taskID")
-    private List<Task> relatedTasks;
-
-    @OneToMany(mappedBy = "ticketID")
-    private List<Ticket> relatedTickets;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(
             name = "company_user",
