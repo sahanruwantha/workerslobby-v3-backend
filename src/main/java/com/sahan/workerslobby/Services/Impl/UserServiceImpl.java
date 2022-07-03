@@ -192,6 +192,28 @@ public class UserServiceImpl implements UserService, UserDetailsService
         return user;
     }
 
+
+    @Override
+    public User validateUser(long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null)
+            throw new UserNotFoundException("invalid User Id");
+        return user;
+    }
+
+    @Override
+    public User validateUserById(long id) throws UserNotFoundException {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null)
+            throw new UserNotFoundException("Invalid user id");
+        return user;
+    }
+
+    @Override
+    public List<User> getAllEngineers() {
+        return userRepository.findUsersByRole("ROLE_ENGINEER");
+    }
+
     private String getTemporaryProfileImageUrl(String username)
     {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -290,5 +312,6 @@ public class UserServiceImpl implements UserService, UserDetailsService
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(USER_IMAGE_PATH + userName + FORWARD_SLASH + userName + DOT + JPG_EXTENSION).toUriString();
     }
+
 
 }

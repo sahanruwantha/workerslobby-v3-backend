@@ -49,4 +49,9 @@ public interface UserService
 
     User updateProfileImage(String username, MultipartFile newProfileImage) throws UserNotFoundException, UserNameExistsException, EmailExistsException, IOException;
 
+    User validateUser(long userId) throws UserNotFoundException;
+
+    User validateUserById(long id) throws UserNotFoundException;
+
+    List<User> getAllEngineers();
 }
