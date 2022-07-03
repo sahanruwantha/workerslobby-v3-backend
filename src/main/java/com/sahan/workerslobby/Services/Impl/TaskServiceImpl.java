@@ -4,8 +4,6 @@ package com.sahan.workerslobby.Services.Impl;
 import com.sahan.workerslobby.Entities.Task;
 import com.sahan.workerslobby.Entities.Ticket;
 import com.sahan.workerslobby.Entities.User;
-import com.sahan.workerslobby.Exceptions.TaskAndTicketNotFoundException;
-import com.sahan.workerslobby.Exceptions.TaskNotFoundException;
 import com.sahan.workerslobby.Exceptions.TicketNotFoundException;
 import com.sahan.workerslobby.Exceptions.UserNotFoundException;
 import com.sahan.workerslobby.Repositories.TaskRepository;
